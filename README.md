@@ -1,2 +1,3 @@
 # Data-deduplication-in-cloud-environment
-This project is about not uploading duplicate files to the cloud.
+
+Cloud storage systems often store duplicate files, leading to unnecessary storage consumption, increased costs, and reduced efficiency. Traditional deduplication techniques help remove redundant data but do not ensure whether the cloud provider is storing data correctly. This project implements an optimized deduplication approach to enhance storage management and system performance. Our solution identifies and eliminates duplicate files before storage, reducing redundancy and improving efficiency. The implementation utilizes MongoDB Atlas for cloud storage, Multer Express for file handling.By integrating these technologies, the project aims to optimize cloud storage, reduce resource wastage, and improve data management.
