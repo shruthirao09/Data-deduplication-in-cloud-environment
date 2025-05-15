@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h1 class="text-2xl font-bold text-center mb-4">Upload Your Files</h1>
+
+        <form id="fileUploadForm" class="flex flex-col">
+            <input type="file" id="fileInput" name="files" multiple class="border p-2 rounded-lg mb-4" required />
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg transition">
+                Upload
+            </button>
+        </form>
+
+        <div id="responseMessage" class="mt-4 text-center font-semibold text-sm"></div>
+    </div>
+
+    <script>
+        document.getElementById('fileUploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            const files = document.getElementById('fileInput').files;
+
+            for (let i = 0; i < files.length; i++) {
+                formData.append('files', files[i]);
+            }
+
+            fetch('http://localhost:5000/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                let message = "";
+                data.forEach(item => {
+                    if (item.success) {
+                        message += `<p class="text-green-600">${item.success}</p>`;
+                    } else if (item.error.includes("Duplicate file")) {
+                        message += `<p class="text-red-600">⚠️ File with same content already exists</p>`;
+                    } else {
+                        message += `<p class="text-red-600">${item.error}</p>`;
+                    }
+                });
+                document.getElementById('responseMessage').innerHTML = message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('responseMessage').innerHTML = '<p class="text-red-600">Error uploading files!</p>';
+            });
+        });
+    </script>
+
+</body>
+</html>
